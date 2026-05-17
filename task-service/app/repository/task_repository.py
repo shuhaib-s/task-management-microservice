@@ -37,7 +37,7 @@ class TaskRepositoryClass(BaseRepository):
     ):
 
         return db.query(Task).filter(
-            Task.user_id == str(user_id)
+            Task.user_id == str(user_id) 
         ).all()
 
 
@@ -45,11 +45,12 @@ class TaskRepositoryClass(BaseRepository):
     def get_task_by_id(
         self,
         task_id: int,
-        db: Session
+        db: Session,
+        user_id,
     ):
 
         return db.query(Task).filter(
-            Task.id == task_id
+            Task.id == int(task_id)
         ).first()
 
 

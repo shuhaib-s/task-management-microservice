@@ -1,4 +1,6 @@
 import { CreateUserDTO, userDatabaseReponse, userLoginDto, UserResponse } from "../dto/user.dto";
+import { EVENT_TYPE } from "../events/constant";
+import eventBus from "../events/eventBus";
 import userRepo , { UserRepository } from "../repositories/user.repository";
 import { passwordCompare, passwordHash } from "../utils/bcryptHelper";
 import { AlreadyExistError, NotFoundError, UnauthorizedError } from "../utils/errors/errors";
@@ -17,6 +19,7 @@ export class UserService{
         const hashedPassword = await passwordHash(data.password.toString())
         const {password, ...newUser}: userDatabaseReponse = await this.userRepo.createUser({email:data.email, firstName:data.firstName, 
             lastName:data.lastName,password:hashedPassword})
+        eventBus.emit(EVENT_TYPE.USER_CREATED, newUser)
         return newUser;
     }
 
