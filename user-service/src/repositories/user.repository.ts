@@ -1,24 +1,24 @@
+import { Model } from "mongoose";
+import { CreateUserDTO, UserResponse } from "../dto/user.dto";
 import { userModel } from "../models/user.model";
+ 
+class UserRepository {
+    constructor(private readonly userModel: Model<any>) {}
+  
+    async createUser(data: CreateUserDTO): Promise<UserResponse> {
+      const newUser = await this.userModel.create(data);
+  
+      const userObject = newUser.toObject();
+  
+      const { password, ...safeUser } = userObject;
+  
+      return safeUser;
+    }
+  
+    async findUserByEmail(email: string) {
+      return this.userModel.findOne({ email });
+    }
+  }
 
-interface User {
-    firstName: string;
-    lastName: string;
-    email:string;
-    password:string | number;
-    _id?: string;
-}
-const createUser = async(data:User)=>{
-    const newUser = new userModel({
-        firstName:data.firstName,
-        lastName: data.lastName,
-        email:data.email,
-        password: data.password
-    })
+  export default new UserRepository(userModel)
 
-    const {password,...user} = await newUser.save()
-    return user;
-}
-
-const findUserByEmail = async(email:string)=>{
-    return userModel.findOne({email})
-}
