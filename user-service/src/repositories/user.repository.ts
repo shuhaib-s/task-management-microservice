@@ -1,22 +1,22 @@
 import { Model } from "mongoose";
-import { CreateUserDTO, UserResponse } from "../dto/user.dto";
+import { CreateUserDTO, userDatabaseReponse } from "../dto/user.dto";
 import { userModel } from "../models/user.model";
- 
-class UserRepository {
+
+type databaseResponse = Promise<userDatabaseReponse | null> 
+export class UserRepository {
     constructor(private readonly userModel: Model<any>) {}
   
-    async createUser(data: CreateUserDTO): Promise<UserResponse> {
+    async createUser(data: CreateUserDTO): Promise<userDatabaseReponse>{
       const newUser = await this.userModel.create(data);
-  
-      const userObject = newUser.toObject();
-  
-      const { password, ...safeUser } = userObject;
-  
-      return safeUser;
+      return newUser.toObject();
     }
   
-    async findUserByEmail(email: string) {
-      return this.userModel.findOne({ email });
+    async findUserByEmail(email: string) :databaseResponse{
+      return this.userModel.findOne({ email }).lean();
+    }
+
+    async findUserById(id:string): databaseResponse{
+      return this.userModel.findById(id)
     }
   }
 
