@@ -16,7 +16,7 @@ export class UserRepository {
     }
 
     async findUserById(id:string): databaseResponse{
-      return this.userModel.findById(id)
+      return this.userModel.findById(id).lean()
     }
   }
 

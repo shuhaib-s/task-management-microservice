@@ -6,7 +6,6 @@ import { CustomRequest } from "../types/Request";
 
 export const userRegister = asyncHandler(async(req:Request,res:Response)=>{
     const body:CreateUserDTO = req.body;
-    console.log(body)
     const registeredUser = await userService.userRegister(body);
     res.status(201).json({data:registeredUser,messge:"user registered successfully"})
 })
