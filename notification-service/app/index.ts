@@ -1,7 +1,7 @@
 import { connectRabitMq, getChannel } from "./rabitMq";
 import dotenv from "dotenv";
 dotenv.config()
-const URL = process.env.RABITMQ_URL || "amqp://localhost:5672";
+const URL = process.env.RABBITMQ_URL || "amqp://localhost:5672";
 const EVENT_TYPES = {
     USER_CREATED:"user.created"
 }
